@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
   {
@@ -52,17 +52,17 @@ const userSchema = new mongoose.Schema(
 );
 
 // pre hooks
-userSchema.pre("save", async function(next) {
-    if(!this.isModified("password")) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
 
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
 
 // post hooks
-userSchema.methods.isPasswordCorrect = async function(password) {
-    return await bcrypt.compare(password, this.password);
-}
+userSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 const userModel = mongoose.models.User || mongoose.model("User", userSchema);
 
